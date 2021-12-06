@@ -6,7 +6,7 @@ namespace WebScraping
     public class WebScraper
     {
         public string errorMessage = string.Empty;
-        public async Task<PersonModel?> ValidateLicense(string firstName, string lastName, string licenseId)
+        public async Task<LicenseModel?> ValidateLicense(string firstName, string lastName, string licenseId)
         {
             if(licenseId is not null)
             {
@@ -30,19 +30,18 @@ namespace WebScraping
                         {
                             if (dataPoints[0].InnerText.Trim().ToLowerInvariant().Contains(firstName.Trim().ToLowerInvariant()) && dataPoints[0].InnerText.Trim().ToLowerInvariant().Contains(lastName.Trim().ToLowerInvariant()))
                             {
-                                PersonModel personModel = new()
+                                LicenseModel licenseModel = new()
                                 {
-                                    FullName = dataPoints[0].InnerText?.Trim(),
                                     TradeName = dataPoints[1].InnerText?.Trim(),
-                                    Address = dataPoints[2].InnerText?.Trim(),
-                                    City = dataPoints[3].InnerText?.Trim(),
+                                    Street = dataPoints[2].InnerText?.Trim(),
+                                    CityCounty = dataPoints[3].InnerText?.Trim(),
                                     State = dataPoints[4].InnerText?.Trim(),
-                                    Zip = dataPoints[5].InnerText?.Trim(),
+                                    ZipCode = dataPoints[5].InnerText?.Trim(),
                                     ExpirationDate = DateTime.Parse(dataPoints[6].InnerText?.Trim()),
                                     Category = dataPoints[7].InnerText?.Trim(),
                                     LicenseId = dataPoints[8].InnerText?.Trim()
                                 };
-                                return personModel;
+                                return licenseModel;
                             }
                             else { errorMessage = "Invalid name. Please verify the name registered is the same as the name as it appears on your license."; }
                         }
