@@ -6,7 +6,7 @@ namespace WebScraping
     public class WebScraper
     {
         public string errorMessage = string.Empty;
-        public async Task<PersonModel?> ValidateLicense(string fullname, string licenseId)
+        public async Task<PersonModel?> ValidateLicense(string firstName, string lastName, string licenseId)
         {
             if(licenseId is not null)
             {
@@ -28,7 +28,7 @@ namespace WebScraping
 
                         if (dataPoints.Count == 9)
                         {
-                            if (dataPoints[0].InnerText.Trim().Contains(fullname))
+                            if (dataPoints[0].InnerText.Trim().ToLowerInvariant().Contains(firstName.Trim().ToLowerInvariant()) && dataPoints[0].InnerText.Trim().ToLowerInvariant().Contains(lastName.Trim().ToLowerInvariant()))
                             {
                                 PersonModel personModel = new()
                                 {
@@ -44,13 +44,12 @@ namespace WebScraping
                                 };
                                 return personModel;
                             }
-                            else { errorMessage = "Invalid name. Please verify the name registered is the same as your license."; }
+                            else { errorMessage = "Invalid name. Please verify the name registered is the same as the name as it appears on your license."; }
                         }
                     }
                 }
                 catch (Exception e) { errorMessage = e.Message; }
             }
-            else { errorMessage = "Input is empty"; }
             return null;
         }
     }
